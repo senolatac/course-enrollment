@@ -1,0 +1,10 @@
+table{
+  width: 100%;
+}
+
+.custom-field {
+  font-size: 14px;
+  width: calc(100% - 40px);
+  padding: 5px;
+  padding-left: 20px;
+}

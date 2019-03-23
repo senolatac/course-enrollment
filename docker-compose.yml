@@ -1,0 +1,81 @@
+version: '3.0'
+services:
+    course-mysql:
+        image: mysql:latest
+        command: --max_allowed_packet=52505856 --bulk_insert_buffer_size=52505856
+        environment:
+            - MYSQL_ROOT_PASSWORD=1234
+            - MYSQL_DATABASE=shacourse
+            - MYSQL_USER=demo
+            - MYSQL_PASSWORD=demo
+        ports:
+            - 3306:3306
+        container_name: mysql    
+    cassandra:
+        build:
+            context: ./
+            dockerfile: cassandra/Dockerfile
+        ports:
+            - "9042:9042"
+        container_name: cassandra
+    discovery-service:
+        build:
+            context: ./
+            dockerfile: eureka-discovery-service/Dockerfile    
+        entrypoint: /wait-for-it.sh -t 5000 mysql:3306 -- java -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=container -jar app.jar
+        ports:
+            - 8761:8761
+    user-service:
+        build:
+            context: ./
+            dockerfile: microservice-user-management/Dockerfile
+        entrypoint: /wait-for-it.sh discovery-service:8761 -- java -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=container -jar app.jar
+        depends_on:
+            - discovery-service
+            - mysql
+        ports:
+            - 8000:8000  
+    log-service:
+        build:
+            context: ./
+            dockerfile: microservice-log-management/Dockerfile
+        environment:
+            SPRING_DATA_CASSANDRA_CONTACT_POINTS: cassandra        
+        entrypoint: /wait-for-it.sh cassandra:9042 -- java -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=container -jar app.jar
+        depends_on:
+            - discovery-service
+            - cassandra
+        ports:
+            - 8002:8002  
+    course-service:
+        build:
+            context: ./
+            dockerfile: microservice-course-management/Dockerfile
+        entrypoint: /wait-for-it.sh user-service:8000 -- java -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=container -jar app.jar
+        depends_on:
+            - discovery-service
+            - user-service
+            - log-service
+            - mysql
+        ports:
+            - 8001:8001 
+    gateway-service:
+        build:
+            context: ./
+            dockerfile: zuul-gateway-service/Dockerfile
+        entrypoint: /wait-for-it.sh course-service:8001 -- java -Djava.security.egd=file:/dev/./urandom -Dspring.profiles.active=container -jar app.jar
+        depends_on:
+            - discovery-service
+            - user-service
+            - log-service
+            - course-service
+        ports:
+            - 8765:8765 
+    course-client:
+        build: ./course-enrollment-client
+        ports:
+            - 4200:80            
+            
+networks:
+  default:
+    driver: bridge

@@ -1,0 +1,51 @@
+info:
+  component: Edge Server
+
+spring:
+  application:
+    name: gateway-server
+  profiles: container
+
+endpoints:
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+  health:
+    sensitive: false
+
+zuul:
+  prefix: /api
+  routes:
+    user:
+      path: /user/**
+      serviceId: user-service
+    course:
+      path: /course/**
+      serviceId: course-service
+    log:
+      path: /log/**
+      serviceId: log-service
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    fetchRegistry: true
+  instance:
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
+
+ribbon:
+  eureka:
+    enabled: true
+  ReadTimeout: 60000
+  ConnectTimeout: 60000
+
+server:
+  port: 8765
+
+logging:
+  level:
+    ROOT: INFO
+    org.springframework.web: DEBUG
