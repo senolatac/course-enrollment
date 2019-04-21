@@ -48,17 +48,17 @@ export class CourseListComponent implements OnInit {
   search(id, text){
     if(id==2){
       this.courseService.popularCourses().subscribe(data => {
-        this.dataSource.data = data;
+        this.dataSource = new MatTableDataSource(data);
       });
       return;
     }
     if(id!=1 && this.searchText){
       this.courseService.filterCourses(this.searchText).subscribe(data => {
-        this.dataSource.data = data;
+        this.dataSource = new MatTableDataSource(data);
       });
     }else{
       this.courseService.allCourses().subscribe(data => {
-        this.dataSource.data = data;
+        this.dataSource = new MatTableDataSource(data);
       });
     }
   }
