@@ -7,7 +7,6 @@
 
     <form name="form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate>
       <div class="alert alert-danger" role="alert" *ngIf="errorMessage">{{errorMessage}}</div>
-      <span id="reauth-email" class="reauth-email"></span>
       <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !name.valid }">
         <label for="name">Full Name</label>
         <input type="text" class="form-control input-text-custom" name="name" id="name" [(ngModel)]="user.name" #name="ngModel" required />
