@@ -116,21 +116,6 @@ label{
   min-height: 1em;
 }
 
-.reauth-email {
-  display: block;
-  color: #404040;
-  line-height: 2;
-  margin-bottom: 10px;
-  font-size: 14px;
-  text-align: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
 .form-signin #inputEmail,
 .form-signin #inputPassword {
   direction: ltr;
@@ -181,14 +166,4 @@ label{
 .btn.btn-signin:active,
 .btn.btn-signin:focus {
   background-color: rgb(12, 97, 33);
-}
-
-.forgot-password {
-  color: rgb(104, 145, 162);
-}
-
-.forgot-password:hover,
-.forgot-password:active,
-.forgot-password:focus{
-  color: rgb(12, 97, 33);
 }
