@@ -32,7 +32,8 @@ public class HibernateConf {
         lcemfb.setJpaVendorAdapter(getJpaVendorAdapter());
         lcemfb.setDataSource(dataSource());
         lcemfb.setPersistenceUnitName("entityManagerFactory");
-        lcemfb.setPackagesToScan("com.sha.coursemanagement.model");
+        //Our main package name is com.sha.microservicecoursemanagement in course lectures so we added it.
+        lcemfb.setPackagesToScan("com.sha.microservicecoursemanagement.model","com.sha.coursemanagement.model");
         lcemfb.setJpaProperties(hibernateProperties());
         return lcemfb;
     }
