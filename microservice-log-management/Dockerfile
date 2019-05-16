@@ -1,4 +1,4 @@
-FROM gradle:4.4-jdk8-alpine as builder
+FROM gradle:latest as builder
 ADD --chown=gradle:gradle . /app/gradle/src
 WORKDIR /app/gradle/src
 RUN gradlew clean assemble
