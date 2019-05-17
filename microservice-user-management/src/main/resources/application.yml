@@ -1,7 +1,7 @@
 spring:
   profiles: container
   datasource:
-    url: jdbc:mysql://mysql:3306/shacourse?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mysql://mysql:3306/shacourse?useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
     username: demo
     password: demo
     initialize: true
