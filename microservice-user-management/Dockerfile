@@ -13,7 +13,7 @@ FROM java:8
 VOLUME /tmp
 COPY ./wait-for-it.sh ./wait-for-it.sh
 #wait-for-it.sh will be executable script.
-RUN chmod +c /wait-for-it.sh
+RUN chmod +x /wait-for-it.sh
 #Copy and paste as app.jar
 COPY --from=builder /app/gradle/src/build/libs/microservice-user-management-0.0.1.jar app.jar
 #Update when it is changed.
