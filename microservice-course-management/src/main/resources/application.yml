@@ -5,16 +5,3 @@ spring:
     username: demo
     password: demo
     initialize: true
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
-    fetchRegistry: true
-  instance:
-    leaseRenewalIntervalInSeconds: 1
-    leaseExpirationDurationInSeconds: 2
-
-ribbon:
-  eureka:
-    enabled: true
