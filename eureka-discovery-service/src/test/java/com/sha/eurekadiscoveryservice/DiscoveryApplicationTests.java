@@ -1,4 +1,4 @@
-package com.sha.usermanagement;
+package com.sha.eurekadiscoveryservice;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class UserManagementApplicationTests {
+public class DiscoveryApplicationTests {
 
 	@Test
 	public void contextLoads() {

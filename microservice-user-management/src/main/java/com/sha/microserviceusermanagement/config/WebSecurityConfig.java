@@ -3,12 +3,10 @@ package com.sha.microserviceusermanagement.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,62 +22,44 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("*");
-
-            }
-        };
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        //Cross origin resource sharing
         http.cors().and()
-                // starts authorizing configurations
+                //starts authorizing configurations.
                 .authorizeRequests()
-                // ignoring the guest's urls "
-                .antMatchers("/resources/**",
-                        "/api/user/**",
-                        "/service/**", "/error").permitAll()
-                // authenticate all remaining URLS
-                .anyRequest().fullyAuthenticated().and()
-                /* "/logout" will log the user out by invalidating the HTTP Session,
-                 * cleaning up any {link rememberMe()} authentication that was configured, */
-                .logout()
-                .permitAll()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/service/logout", "POST"))
+                //ignoring the guest's urls...
+                .antMatchers("/resources/**", "/error", "/service/**").permitAll()
+                //authenticate all remaining URLs.
+                .anyRequest().fullyAuthenticated()
                 .and()
-                .formLogin().loginPage("/service/user").and()
-                // enabling the basic authentication
+                .logout().permitAll()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/service/logout", "POST"))
+                //login form
+                .and()
+                .formLogin().loginPage("/service/login").and()
+                //enable basic header authentication.
                 .httpBasic().and()
-                // configuring the session on the server
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).and()
-                // disabling the CSRF - Cross Site Request Forgery
+                //cross-side request forgery.
                 .csrf().disable();
     }
 
-    @Bean
-    public AuthenticationManager customAuthenticationManager() throws Exception {
-        return authenticationManager();
-    }
-	
-    // This method is for overriding the default AuthenticationManagerBuilder.
-	// We can specify how the user details are kept in the application. It may
-	// be in a database, LDAP or in memory.
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-	}
-
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer(){
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+            registry.addMapping("/**").allowedOrigins("*");
+            }
+        };
     }
 }

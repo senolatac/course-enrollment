@@ -1,6 +1,5 @@
 package com.sha.microserviceusermanagement.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -8,9 +7,14 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "user")
-public class User implements IModel {
+public class User {
 
     @Id
+    //Generation Types:
+    //Auto: Default one. It does not take any specific action.
+    //Identity: Auto increment.
+    //Sequence: Oracle or Posgresql creates variable to auto increment.
+    //Table: Hibernate uses a database table to simulate a sequence.
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -20,11 +24,10 @@ public class User implements IModel {
     @Column(name = "username")
     private String username;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "password")
     private String password;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "role")
     private Role role;
 }

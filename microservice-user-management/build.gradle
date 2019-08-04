@@ -1,16 +1,14 @@
 plugins {
-	id 'org.springframework.boot' version '2.1.4.RELEASE'
+	id 'org.springframework.boot' version '2.1.6.RELEASE'
 	id 'java'
 }
 
 apply plugin: 'io.spring.dependency-management'
 
 group = 'com.sha'
-version = '0.0.1'
+version = '0.0.1-SNAPSHOT'
+//You should change it according to your java version.
 sourceCompatibility = '1.8'
-jar{
-	archivesBaseName = 'microservice-user-management'
-}
 
 configurations {
 	compileOnly {

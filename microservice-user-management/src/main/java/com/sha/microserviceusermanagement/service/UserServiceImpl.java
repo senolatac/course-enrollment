@@ -1,6 +1,5 @@
 package com.sha.microserviceusermanagement.service;
 
-import com.sha.microserviceusermanagement.model.Role;
 import com.sha.microserviceusermanagement.model.User;
 import com.sha.microserviceusermanagement.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,23 +14,23 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    //We will create bean for it in security config.
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public void save(User user) {
+    public User save(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(Role.USER);
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     @Override
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public User findByUsername(String username){
+        return userRepository.findByUsername(username).orElse(null);
     }
 
     @Override
     public List<String> findUsers(List<Long> idList){
-        return this.userRepository.findUserNames(idList);
+        return userRepository.findByIdList(idList);
     }
 }

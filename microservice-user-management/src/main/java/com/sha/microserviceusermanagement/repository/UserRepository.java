@@ -6,10 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findByUsername(String username);
 
-    @Query("Select u.name from User u where u.id in (:pIdList)")
-    List<String> findUserNames(@Param("pIdList") List<Long> userIdList);
+    Optional<User> findByUsername(String username);
+
+    @Query("select u.name from User u where u.id in (:pIdList)")
+    List<String> findByIdList(@Param("pIdList") List<Long> idList);
 }
