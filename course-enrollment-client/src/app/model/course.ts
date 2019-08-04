@@ -1,8 +1,7 @@
 export class Course {
-  id : string;
+  id: string;
   title: string="";
   author: string="";
   category: string="";
-  serialNumber: string="";
   publishDate: any;
 }

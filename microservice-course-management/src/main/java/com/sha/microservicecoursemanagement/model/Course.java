@@ -20,9 +20,6 @@ public class Course implements IModel {
     @Column(name="author")
     private String author;
 
-    @Column(name="serial_number")
-    private String serialNumber;
-
     @Column(name="category")
     private String category;
 
